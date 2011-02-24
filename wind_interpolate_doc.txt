@@ -1,0 +1,16 @@
+wind_interpolate is slightly different in its choices for interpolation
+than wind_interpolate0.  The user sets a radius of influence for the data, 
+but it still lets you choose whether or not to use bilinear interpolation. 
+Radials at any angle will be interpolated in wind_interpolate. 
+wind_interpolate lets you set the maximum radius of influence for your 
+Doppler radials to affect a grid point, as well as the efolding radius 
+for the affect of a Doppler radial at a given distance
+from an analysis grid point.  If you turn on bilinear interpolation in this
+program it is suggested you try a radius of influence of twice your grid
+spacing and an efolding distance of one times your grid spacing.  These
+are the default values in wind_interpolate0.  If you use these values, then
+the difference between using wind_interpolate and these values and using
+wind_interpolate is that no Doppler radials are excluded simply because of
+their orientation relative to horizontal.
+
+See job_wind_interpolate_doc.txt for more setup information.

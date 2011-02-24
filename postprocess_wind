@@ -1,0 +1,54 @@
+#!/bin/sh
+
+if test ! -f "$1"; then
+  echo "Usage: postprocess_wind <wind filename>\n\t Make sure wind file is in CEDRIC format"; 
+  exit 1;
+fi 
+rm fort.31
+ln -s $1 fort.31
+PREFIX=${1: 0: ${#1}-4}
+#
+cedric << syn.inp
+READVOL 31      NEXT                    YES
+RENAME  U-COMPON        U       V-COMPON        V
+RENAME  W-COMPON        W
+PATCHER FDBZ    DBZ     FILLCON 5.0     4.0     20.0            Z       FULL
+PATCHER FU      U       FILLCON 5.0     4.0     20.0            Z       FULL
+PATCHER FV      V       FILLCON 5.0     4.0     20.0            Z       FULL
+PATCHER FW      W       FILLCON 5.0     4.0     20.0            Z       FULL
+PATCHER FDBZ    FDBZ    FILLCON 2.0     4.0     20.0            Z       FULL
+PATCHER FU      FU      FILLCON 2.0     4.0     20.0            Z       FULL
+PATCHER FV      FV      FILLCON 2.0     4.0     20.0            Z       FULL
+PATCHER FW      FW      FILLCON 2.0     4.0     20.0            Z       FULL
+FILTER  FU      FU      L3D     1.0
+FILTER  FV      FV      L3D     1.0
+FILTER  FW      FW      L3D     1.0
+FUNCTION
+        UREL    P       LINEAR  FU              1.0     0.0
+        VREL    P       LINEAR  FV              1.0     0.0
+END
+CONVERGECONM    FU      FV      5.0
+FUNCTION
+        DIV     P       LINEAR  CONM            -1.0    0.0
+        VORT    P       DDI-DDJ FV      FU      1.0     1.0     0.0     0.0
+END
+FUNCTION
+        UTMP    T       SQ+SQ   FU      FV
+        WSPD    P       SQRT    UTMP
+END
+DELETE  DIVERGENCONM
+WRITVOL 33                      BEG                     PURE    BEG
+GRAPHICS        Z       1.                                              FULL 
+        VECTOR  FU      FV      ARROW   4       15.0    2.5     PROP0.9 WHITE
+        CONTOUR FDBZ    FALL    001110101.0     UNI     -10.0   50.0    5.0 
+        CONTOUR FW      FALL    001110101.0     UNI     -30.0   30.0    2.0
+        CONTOUR VORT    FALL    001110101.0     UNI     -10.0   10.0    1.0
+        CONTOUR DIV     FALL    001110101.0     UNI     -10.0   10.0    1.0
+        CONTOUR WSPD    FALL    001110101.0     UNI       0.0   40.0    2.0
+END
+QUIT
+syn.inp
+#
+\mv fort.33 $PREFIX-post.ced
+\mv gmeta $PREFIX-post.plt
+\rm -f fort.31 .cededit .cedremap

@@ -1,0 +1,83 @@
+940925H1
+   c 8 character identifier for flight mission or whatever you want to put
+   c there
+   c
+OLIVIA SEP25
+   c experiment identifier of up to 28 characters
+   c
+2
+   c Number of radars/uf files that will be interpolated
+   c
+/data/users/gamache/swp.42/ufd.940925205800.TA42P3.0.tape
+   c Name of uf file from radar 1
+   c
+210000 211300
+   c Start and end time of data in seconds since midnight (end time may go
+   c over 240000)  Suggest you use 000000 999999 to get all the data in the
+   c uf file.  Less time can be used to pick and choose times you want to 
+   c interpolate from uf file
+   c
+/data/users/gamache/swp.42/SUMFILE_42_1_05
+   c Name of interpolation output file from interpolation of uf file 1
+   c
+/data/users/gamache/swp.43/ufd.940925205800.TA43P3.0.tape
+   c Name of uf file from radar 2
+   c
+210000 211300
+   c Time of interpolation for uf file from radar 2 (see note for radar 1)
+   c
+/data/users/gamache/swp.43/SUMFILE_43_1_05
+   c Name of uf file for radar 2
+   c
+   c There may be more repeats of the above 3 lines if there are more than
+   c two radars
+   c
+1. 4.
+   c Cell/radar-target motion.  Used to composite radar data relative to a
+   c moving weather system
+   c
+210630
+   c Time around which to composite data.  Data obtained before this time
+   c is "advected" forward to account for the storm motion, and data
+   c obtained after this time is "advected" rearward also to account for
+   c storm motion
+   c
+19.040 -120.061
+   c Lat/lon of reference point within analysis domain
+   c
+1. 1. 1.
+   c x, y, and z grid resolution in analysis domain
+   c
+40. 40. 0. 0.
+   c First two entries show the location of the lat/lon reference point given
+   c above within the analysis domain relative to the lower left corner
+   c
+80 80 17
+   c number of grid points in analysis in the x, y, and z dimensions
+   c
+1. 1.
+   c horizontal and vertical max distances from grid point for an
+   c observation to be included in the interpolation
+   c
+.5 .5
+   c horizontal and vertical e-folding distances for gaussian weight applied 
+   c to an observation in the interpolation
+   c
+VU
+   c name in the uf file for the unfolded velocity data
+   c
+DB
+   c name in the uf file for the radar reflectivity data
+   c
+0
+   c will a pseudo-bilinear interpolation (value=1) be used instead of a 
+   c gaussian distance-weighted interpolation (value not equal to 1)
+   c In either case all grid points that are not surrounded in all eight 
+   c directions from the grid point will be flagged to make sure only
+   c interpolation, and not extrapolation are being done to the 
+   c interpolated Doppler radials
+  
+
+
+
+

@@ -1,0 +1,73 @@
+940925H1
+   c Line 1 is a flight (date) identifier that can be whatever 8 character 
+   c identifier you want
+   c
+OLIVIA SEP25
+   c Line 2 is a longer identifier describing the experiment or data set up to 
+   c 28? characters
+   c
+2
+   c Line 3 the number of different uf files available, generally the number of
+   c different radars observing the same analysis region
+   c
+214300 214827
+   c Line 4 times for beginning and end of interpolation for radar 1 
+   c that will end up in the
+   c descriptor headers of final wind analysis
+   c
+/data/users/gamache/uf_test_results/SUMFILE_42_test
+   c path and name of uf data set for radar 1
+   c
+214200 214827
+   c repeated for uf file/radar 2
+   c
+/data/users/gamache/uf_test_results/SUMFILE_43_test
+   c also repeated for second radar.
+   c
+   c above two lines will be repeated with different paramaters for each
+   c radar over two radars
+   c
+35.47 -76.65
+   c latitude and longitude for reference point within the analysis domain
+   c
+1. 1. 1.
+   c x, y and z grid resolution of analysis in kilometers
+   c
+0. 0. 0. 0.
+   c distance of lat/lon reference point in x and y from lower left corner
+   c comprise the first two entries
+   c height of surface above sea level (over ocean this should be zero)
+   c last entry is clockwise rotation of y axis from north, e.g. if the
+   c rotation is 45, the y axis of the analysis actually pointing to the NE
+   c instead of N
+80 80 11
+   c x, y and z dimensions of analysis grid (total pts in the case shown being 
+   c 80x80x11
+1.
+   c the single value above is the weight given to the continuity equation 
+   c constraint.  A value suggested by the math is 1., but my experience
+   c is that there are enough systematic errors in the solution of the 
+   c continuity equation that 1000. is my suggested starting value, but you 
+   c play with that weight if you want.
+   c If you play I suggest varying by orders of magnitude
+1. 1.
+   c height of melting level in km, width of melting band in km
+   c
+20. 30.
+   c DBZ1 and DBZ2--Above melting band if DBZ<DBZ1 fallspeed is for snow
+   c if DBZ1<DBZ<DBZ2 linear interpolation between snow and rain fallspeeds
+   c if DBZ>DBZ2 fallspeed is for rain even though above melting band
+   c another linear interpolation is applied over the above one when the
+   c observation is within the melting band
+   c
+wind3_fill.w
+   c Name of output wind file from program wind0
+5.0E-05
+   c Value of the convergence parameter where you stop execution and write 
+   c out the wind file. If you think your wind field variational solution has
+   c not converged enough you can lower this number.  If you think you can get
+   c just as good a solution with less iterations, increase this number (by 2
+   c times, 5 times, or 10 times)
+
+
+

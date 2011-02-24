@@ -1,0 +1,17 @@
+#!/bin/csh
+#script to produce UF from dorade sweep files 
+setenv INPUT_FORMAT "SWEEP_FILES"
+# Following is used if converting from uf to sweep
+#setenv SOURCE_DEV ufd.1050922180000.TF-ELDR.0.tape
+setenv DORADE_DIR ./swp
+setenv UF_DIRECTORY ./uf
+#setenv OUTPUT_FIELDS "DBZ VG"
+setenv OUTPUT_FLAGS "UF_DATA NO_UFEOFS"
+#setenv TIME_LIMITS "09/14/08:37:30:00 < 09/14/08:48:30:00"
+setenv SELECT_RADARS "TA-ELDR"
+# Uncomment the following to run without prompting
+setenv BATCH_MODE;
+xltrsii
+setenv SELECT_RADARS "TF-ELDR"
+xltrsii
+

@@ -1,0 +1,9 @@
+*.o
+build/*
+linuxlib/*
+maclib/*
+*.xcodeproj/*
+*.app/*
+.svn
+.DS_Store
+profile

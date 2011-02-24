@@ -1,0 +1,69 @@
+FC=gfortran
+FFLAGS= -g -O2 -m64
+LIBS = ./linxlib/libgfortran.a ./linuxlib/libgfortranbegin.a
+all : wind_interpolate wind3_fill
+char_swap.o : char_swap.f
+	$(FC) $(FFLAGS) -c char_swap.f
+
+byte_swap_i2.o : byte_swap_i2.f
+	$(FC) $(FFLAGS) -c byte_swap_i2.f
+
+byte_swap_i4.o : byte_swap_i4.f
+	$(FC) $(FFLAGS) -c byte_swap_i4.f
+
+dnewbig_characteristic_fill.o : dnewbig_characteristic_fill.f
+	$(FC) $(FFLAGS) -c dnewbig_characteristic_fill.f 
+
+sparsenew_fill.o : sparsenew_fill.f
+	$(FC) $(FFLAGS) -c sparsenew_fill.f 
+
+dnewbig_interpolate.o : dnewbig_interpolate.f
+	$(FC) $(FFLAGS) -c dnewbig_interpolate.f
+
+files_rho_13_real.o : files_rho_13_real.f
+	$(FC) $(FFLAGS) -c files_rho_13_real.f
+
+ufdisc_io_new.o : ufdisc_io_new.f
+	$(FC) $(FFLAGS) -c ufdisc_io_new.f
+
+solvesparse_itpack.o : solvesparse_itpack.f
+	$(FC) $(FFLAGS) -c solvesparse_itpack.f
+
+diver3.o : diver3.f
+	$(FC) $(FFLAGS) -c diver3.f
+
+miscellaneous_scan.o : miscellaneous_scan.f
+	$(FC) $(FFLAGS) -c miscellaneous_scan.f 
+
+abcd_scan_interpolate.o: abcd_scan_interpolate.f
+	$(FC) $(FFLAGS) -c abcd_scan_interpolate.f
+
+abcd_scan.o : abcd_scan.f
+	$(FC) $(FFLAGS) -c abcd_scan.f
+
+readramfile.o : readramfile.f
+	$(FC) $(FFLAGS) -c readramfile.f
+
+ditp.o : ditp.f
+	$(FC) $(FFLAGS) -c ditp.f > ditp.list
+
+wind_interpolate : dnewbig_interpolate.o \
+ufdisc_io_new.o diver3.o \
+files_rho_13_real.o miscellaneous_scan.o abcd_scan_interpolate.o \
+readramfile.o byte_swap_i2.o byte_swap_i4.o char_swap.o
+	$(LDFLAGS)
+	$(FC) $(FFLAGS) -o wind_interpolate dnewbig_interpolate.o ufdisc_io_new.o \
+diver3.o files_rho_13_real.o miscellaneous_scan.o abcd_scan_interpolate.o \
+readramfile.o byte_swap_i2.o byte_swap_i4.o char_swap.o $(LIBS)
+
+wind3_fill : dnewbig_characteristic_fill.o \
+sparsenew_fill.o \
+solvesparse_itpack.o diver3.o files_rho_13_real.o miscellaneous_scan.o \
+abcd_scan.o ditp.o ufdisc_io_new.o readramfile.o \
+byte_swap_i4.o byte_swap_i2.o char_swap.o
+	$(LDFLAGS)
+	$(FC) $(FFLAGS) -o wind3_fill  dnewbig_characteristic_fill.o \
+sparsenew_fill.o solvesparse_itpack.o diver3.o files_rho_13_real.o \
+miscellaneous_scan.o abcd_scan.o ditp.o ufdisc_io_new.o readramfile.o \
+byte_swap_i4.o byte_swap_i2.o char_swap.o $(LIBS)
+

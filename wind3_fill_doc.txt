@@ -1,0 +1,24 @@
+wind3_fill is the fully three-dimensional wind solver that includes the 
+continuity equation and a small amount of filtering of the solution when
+determining the cost function.  Thus the solution loosely satifies the 
+continuity equation (a tight solution is not conducive to producing the
+winds closest to reality).  Satisfying continuity very closely is not 
+even possible since the discretization only approaches a solution to the 
+continuity equation.  A "correction" can be applied later to exactly 
+satisfy the discretized continuity equation if a budget is desired.
+
+This is more of a research program than wind0, and wind_interpolate is
+probably a better choice than wind_interpolate0 if you want to experiment
+with a range of radii of influence when interpolating Doppler radials.
+
+IMPORTANT NOTE ON 19 JUNE 2003:  I have added a line to the job file that 
+allows you to increase the weight given to the continuity equation, since I 
+have found that the equation often has regions many points across where the 
+sign of the error of the continutity equation solution is the same and the 
+magnitude approaches .001 /s.  This is not good when such contiguous regions
+ of error of the same sign exist.  A value of 1000. is found to be good in
+the FAST cases through Hurricane Humberto (2001), and even then the 
+Doppler projection equations only have an error around 1 m/s rms, approximately
+the expected rms error in the observations themselves.  This parameter may now
+be changed.
+

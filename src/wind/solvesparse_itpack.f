@@ -1,0 +1,149 @@
+      SUBROUTINE SOLVESPARSE(IMAX,JMAX,KMAX,NN,N,NNNN,IPOS,
+     + SX,SY,SZ,VELS,LU,A,RHS,C,R,P,AP,INDEX1,INDEX2,DOTMIN,
+     + LUO,OFILNAM,KEYWORDB,FLTNAME,
+     +  STMNAME,RADAR,EXPERIMENT,
+     +  CREATIME,EXTRA1,KOUNT,NMOSM,
+     +  IUNFLD,IATTEN,IFLAG,EXTRA2,EXTRA3,STIME,ETIME,OLAT,OLON,
+     +  XZB,YZB,ZZB,ROTB,RA,CO1,CO2,AZMCOR,ELCOR,THRESH,
+     +  POWERT,BIEL,AZBIEL,ETIME1,STIME2,EXTRA6,EXTRA7,
+     +  DIV,SUMDBZ,SUMWTSAVE,IGUESS,X,CC,U,V,W,IUV,NORM,
+     +  NNNNN,INDXN,UGUESS,VGUESS,WGUESS,NZ,NW,IA,JA,IWORK,WORK,ITMAX,
+     +  JKI,INDEX4,N4)
+      INTEGER IA(NNNN),JA(NZ),IWORK(NZ)
+      REAL DIV(NN),SUMDBZ(NN)
+      DOUBLE PRECISION SUMWTSAVE(NN)
+      DOUBLE PRECISION A(NNNNN),RHS(NNNN),WORK(NW),X(NNNN)
+      REAL VELS(N)
+      REAL UGUESS(NN),VGUESS(NN),WGUESS(NN)
+      INTEGER INDEX1(N),INDEX2(N)
+      CHARACTER KEYWORDB*4,FLTNAME*8,STMNAME*12,RADAR*4,EXPERIMENT*32
+      CHARACTER CREATIME*32,EXTRA1*28,OFILNAM*56
+      COMMON /JPOSI/JPOSITIONU,JPOSITIONV,JPOSITIONW
+      INTEGER KOUNT,NMOSM,IUNFLD,IATTEN,IFLAG,EXTRA2,EXTRA3
+      REAL STIME,ETIME,OLAT,OLON,XZB,YZB,ZZB,ROTB,RA,CO1
+      REAL CO2,AZMCOR,ELCOR,THRESH,POWERT,BIEL,AZBIEL,ETIME1,STIME2
+      REAL EXTRA6,EXTRA7
+      DOUBLE PRECISION RPARM(12)
+      INTEGER IPARM(12),INDEX4(N4)
+      REAL U(NN),V(NN),W(NN)
+
+      FLAG=-1.0E+10 
+c      WRITE(1,*)'IPOS = ',IPOS
+      write(6,*)'nw = ',nw
+      write(6,*)'index1(1) = ',index1(1)
+      write(6,*)'n,nn,nnnn = ',n,nn,nnnn
+      OPEN(98,FILE='indexnorm',FORM='UNFORMATTED')
+      WRITE(98)N,NN,NNNN,IPOS
+      DO I=1,NN
+       WRITE(98)INDEX2(I)
+      ENDDO
+      DO I=1,N4
+       WRITE(98)INDEX4(I)
+      ENDDO
+      CLOSE(98)
+      IF(JKI.EQ.1)THEN
+       DO I=1,IPOS 
+        X(I)=VELS(INDEX1(I))
+        IF(X(I).LT.-1.0E+8)THEN
+         WRITE(6,*)'I,INDEX1(I),X(I) = ',
+     +    I,INDEX1(I),X(I)
+        ENDIF
+       ENDDO 
+      ENDIF
+      CALL DFAULT(IPARM,RPARM)
+      IPARM(1)=10000
+      IPARM(1)=ITMAX
+      IPARM(2)=2
+      IPARM(3)=0
+      IPARM(4)=6
+      IPARM(5)=0
+      IPARM(6)=0
+      IPARM(7)=1
+      IPARM(8)=0
+      IPARM(9)=-1
+      IPARM(10)=0
+      IPARM(11)=0
+      IPARM(12)=0
+      RPARM(1)=5.0E-06
+      RPARM(2)=0.
+      RPARM(3)=0.
+      RPARM(4)=.75
+      RPARM(5)=1.3
+      RPARM(6)=0.
+      RPARM(7)=.25
+      RPARM(8)=7.11E-13
+      RPARM(9)=0.
+      RPARM(10)=0.
+      RPARM(11)=0.
+      RPARM(12)=0.
+
+      WRITE(6,*)'IPOS,NW,NNNN,NNNNN = ',IPOS,NW,NNNN,NNNNN
+      WRITE(6,*)'IPARM = ',IPARM
+      WRITE(6,*)'RPARM = ',RPARM
+      CALL SSORCG(IPOS,IA,JA,A,RHS,X,IWORK,NW,WORK,IPARM,RPARM,IER)
+      WRITE(6,*)'IPARM = ',IPARM
+      WRITE(6,*)'RPARM = ',RPARM
+10    DO I=1,N
+       IF(INDEX2(I).GT.0)THEN 
+        VELS(I)=X(INDEX2(I))
+       ELSE 
+        VELS(I)=FLAG 
+       ENDIF
+      ENDDO 
+
+      RETURN
+      END 
+
+
+      SUBROUTINE MINMAX(U,V,W,IMAX,JMAX,KMAX)
+      REAL U(IMAX,JMAX,KMAX),V(IMAX,JMAX,KMAX)
+      REAL W(IMAX,JMAX,KMAX)
+
+      FLAG=-1.0E+10
+      UMIN=FLAG
+      VMIN=FLAG
+      WMIN=FLAG
+      UMAX=FLAG
+      VMAX=FLAG
+      WMAX=FLAG
+      DO K=1,KMAX
+       DO J=1,JMAX
+        DO I=1,IMAX
+         IF(U(I,J,K).GT.FLAG)THEN
+          IF(UMIN.LE.FLAG)THEN
+           UMIN=U(I,J,K)
+           UMAX=U(I,J,K)
+          ELSE
+           IF(U(I,J,K).GT.UMAX)UMAX=U(I,J,K)
+           IF(U(I,J,K).GT.FLAG.AND.U(I,J,K).LT.UMIN)UMIN=U(I,J,K)
+          ENDIF
+         ENDIF
+         IF(V(I,J,K).GT.FLAG)THEN
+          IF(VMIN.LE.FLAG)THEN
+           VMIN=V(I,J,K)
+           VMAX=V(I,J,K)
+          ELSE
+           IF(V(I,J,K).GT.VMAX)VMAX=V(I,J,K)
+           IF(V(I,J,K).GT.FLAG.AND.V(I,J,K).LT.VMIN)VMIN=V(I,J,K)
+          ENDIF
+         ENDIF
+         IF(W(I,J,K).GT.FLAG)THEN
+          IF(WMIN.LE.FLAG)THEN
+           WMIN=W(I,J,K)
+           WMAX=W(I,J,K)
+          ELSE
+           IF(W(I,J,K).GT.WMAX)WMAX=W(I,J,K)
+           IF(W(I,J,K).GT.FLAG.AND.W(I,J,K).LT.WMIN)WMIN=W(I,J,K)
+          ENDIF
+         ENDIF
+        ENDDO
+       ENDDO
+      ENDDO
+      OPEN(93,FILE='/hrd/dat/gustav/tracking/maxandmin')
+      WRITE(93,*)'UMIN = ',UMIN,' AND UMAX = ',UMAX
+      WRITE(93,*)'VMIN = ',VMIN,' AND VMAX = ',VMAX
+      WRITE(93,*)'WMIN = ',WMIN,' AND WMAX = ',WMAX
+      CLOSE(93)
+      RETURN
+      END
+
