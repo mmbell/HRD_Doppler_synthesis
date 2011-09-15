@@ -59,7 +59,7 @@ Please reference the following publication if you use this code for your analysi
 and acknowledge NCAR/EOL and the National Science Foundation when using ELDORA data,
 and/or acknowledge the NOAA AOML Hurricane Research Division when using NOAA P3 data.
 
-Reasor, P.D., M.D. Eastin, and J.F. Gamache, 2009:  Rapidly  Intensifying Hurricane Guillermo (1997). Part I: Low-Wavenumber Structure and Evolution. _Mon. Wea. Rev._, *137*, 603–631.
+Reasor, P.D., M.D. Eastin, and J.F. Gamache, 2009: Rapidly Intensifying Hurricane Guillermo (1997). Part I: Low-Wavenumber Structure and Evolution. _Mon. Wea. Rev._, *137*, 603–631.
 
 h2. How to Contribute
 
@@ -70,7 +70,7 @@ You can also file bugs or feature requests under the HRD_Doppler_synthesis proje
 h2. License
 
 The wind interpolation and synthesis software was written by John Gamache at NOAA/AOML/HRD. 
-The code has been modified by Michael Bell.
+This version of the code has been modified by Michael Bell.
 
 This software has been prepared by an employee of the United States Government 
 as part of official duties, and is therefore in the public domain.
