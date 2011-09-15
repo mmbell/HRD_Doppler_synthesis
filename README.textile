@@ -70,7 +70,7 @@ You can also file bugs or feature requests under the HRD_Doppler_synthesis proje
 h2. License
 
 The wind interpolation and synthesis software was written by John Gamache at NOAA/AOML/HRD. 
-The synthesis and I/O code has been modified by Michael Bell to simplify use with ELDORA data.
+The code has been modified by Michael Bell.
 
 This software has been prepared by an employee of the United States Government 
 as part of official duties, and is therefore in the public domain.
