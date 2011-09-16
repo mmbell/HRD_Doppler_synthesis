@@ -61,6 +61,9 @@ and/or acknowledge the NOAA AOML Hurricane Research Division when using NOAA P3 
 
 Reasor, P.D., M.D. Eastin, and J.F. Gamache, 2009: Rapidly Intensifying Hurricane Guillermo (1997). Part I: Low-Wavenumber Structure and Evolution. _Mon. Wea. Rev._, *137*, 603–631.
 
+This code uses the "ITPACK":http://rene.ma.utexas.edu/CNA/ITPACK/ software package developed at the Center for Numerical Analysis, the University of Texas at Austin.
+Young, D. and D. Kincaid, 1981: "The ITPACK Package for Large Sparse Linear Systems," in _Elliptic Problem Solvers_, (M. Schultz, ed.), Academic Press, New York, 163-185.
+
 h2. How to Contribute
 
 Fork mmbell/HRD_Doppler_synthesis on GitHub, add your improvement, push it to a branch in your fork named for the topic, send a pull request.
